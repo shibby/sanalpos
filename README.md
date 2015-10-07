@@ -11,7 +11,7 @@ Aşağıdaki şekilde bir composer.json dosyası yaratıp php composer.phar inst
 ```json
 {
     "require": {
-        "defiant/sanalpos": "dev-master"
+        "shibby/sanalpos": "dev-master"
     }
 }
 ```
