@@ -25,7 +25,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface{
         'anadolubank'=>'anadolusanalpos.est.com.tr'
     ];
 
-    protected $testServer = 'testsanalpos.est.com.tr';
+    protected $testServer = 'beta.asseco-see.com.tr';
 
     public function __construct($bank, $clientId, $username, $password)
     {
@@ -41,7 +41,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface{
 
     public function getServer()
     {
-        $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer.'/servlet/cc5ApiServer' : 'https://'.$this->server.'/servlet/cc5ApiServer';
+        $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer.'/fim/api' : 'https://'.$this->server.'/fim/api';
         return $this->server;
     }
 
@@ -66,7 +66,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface{
         $x['number']    = $dom->createElement('Number', $this->card['number']);
         $x['expires']   = $dom->createElement('Expires', $this->card['month'].$this->card['year']);
         $x['cvv']       = $dom->createElement('Cvv2Val', $this->card['cvv']);
-        $x['ip']        = $dom->createElement('IPAddress', '192.168.1.1');// $_SERVER['REMOTE_ADDR']);
+        $x['ip']        = $dom->createElement('IPAddress', (isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'192.168.1.1');
         $x['total']     = $dom->createElement('Total', $this->order['total']);
         /*$x['billTo']    = $dom->createElement('BillTo');
         $x['shipTo']    = $dom->createElement('ShipTo');*/

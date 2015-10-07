@@ -34,11 +34,11 @@ class SanalPosResponseEst implements SanalPosResponseInterface{
             return [];
         }
 
-        return $this->xml->CC5Response->ErrMsg;
+        return $this->xml->ErrMsg;
     }
 
     public function response()
     {
-        return $this->response;
+        return $this->xml;
     }
 } 
