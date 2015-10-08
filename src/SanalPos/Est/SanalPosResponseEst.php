@@ -25,7 +25,7 @@ class SanalPosResponseEst implements SanalPosResponseInterface{
         // if response code === '00'
         // then the transaction is approved
         // if code is anything other than '00' that means there's an error
-        return (string) $this->xml->CC5Response->ProcReturnCode === '00';
+        return (string) $this->xml->ProcReturnCode === '00';
     }
 
     public function errors()
