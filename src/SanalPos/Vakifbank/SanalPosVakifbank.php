@@ -64,7 +64,6 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
-        dd($this->xml);
         return $this->send();
     }
 
