@@ -47,7 +47,10 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         $x['TransactionId'] = $dom->createElement('TransactionId', $this->order['orderId']);
 
         $x['CurrencyAmount'] = $dom->createElement('CurrencyAmount', $this->order['total']);
-        $x['CurrencyCode'] = $dom->createElement('CurrencyCode', 949); //TODO: currencycode parameter
+        $x['CurrencyCode'] = $dom->createElement('CurrencyCode', 949); //TODO: set currencycode parameter
+        if($this->order['taksit']){
+            $x['NumberOfInstallments'] = $dom->createElement('NumberOfInstallments', $this->order['taksit']);
+        }
 
         $x['Pan'] = $dom->createElement('Pan', $this->card['number']);
         $x['Cvv'] = $dom->createElement('Cvv', $this->card['cvv']);
@@ -61,6 +64,7 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+        dd($this->xml);
         return $this->send();
     }
 
