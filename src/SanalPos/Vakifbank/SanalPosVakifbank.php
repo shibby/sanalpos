@@ -15,7 +15,7 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         'vakifbank'    => 'onlineodeme.vakifbank.com.tr:4443/VposService/v3/Vposreq.aspx',
     ];
 
-    protected $testServer = 'onlineodeme.vakifbank.com.tr:4443/VposService/v3/Vposreq.aspx';
+    protected $testServer = 'onlineodemetest.vakifbank.com.tr:4443/VposService/v3/Vposreq.aspx';
 
     public function __construct($bank, $merchantId, $terminalNo, $password)
     {
@@ -56,6 +56,9 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         $x['Cvv'] = $dom->createElement('Cvv', $this->card['cvv']);
         $x['Expiry'] = $dom->createElement('Expiry', $this->card['year'].$this->card['month']);
         $x['TransactionDeviceSource'] = $dom->createElement('TransactionDeviceSource', 0);
+
+
+        $x['ClientIp'] = $dom->createElement('ClientIp', (isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'192.168.1.1');
 
         foreach($x as $node)
         {
