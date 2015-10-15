@@ -86,7 +86,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
 
     public function cancel($orderId)
     {
-        $x['Transaction']=[
+        $x['Transaction'] = [
             'Type' => 'void',
             'Amount' => $this->order['total'],
             'CurrencyCode' => $this->getCurreny(),
@@ -135,7 +135,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         $root = $dom->createElement('GVPSRequest');
 
         $ip = $_SERVER['REMOTE_ADDR'] ? $_SERVER['REMOTE_ADDR'] : '192.168.1.1';
-        $ip = '192.168.1.1'; // for cli testing
+        //$ip = '192.168.1.1'; // for cli testing
 
         $x['Mode']      = $this->mode;
         $x['Version']   = 'v0.01';
@@ -153,7 +153,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         ];
         $x['Card']      = [
             'Number' => $this->card['number'],
-            'ExpireDate' => $this->card['month'].$this->card['year'],
+            'ExpireDate' => $this->card['month'].substr($this->card['year'],0,-2),
             'CVV2' => $this->card['cvv']
         ];
         $x['Order']     = [

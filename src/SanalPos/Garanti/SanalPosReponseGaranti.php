@@ -25,7 +25,12 @@ class SanalPosReponseGaranti implements SanalPosResponseInterface {
         // if response code === '00'
         // then the transaction is approved
         // if code is anything other than '00' that means there's an error
-        return (string) $this->xml->Transaction->Response->Code[0] === '00';
+        if($this->xml->Transaction->Response->Code[0]){
+            $code = $this->xml->Transaction->Response->Code[0];
+        }else{
+            $code = $this->xml->Transaction->Response->Code;
+        }
+        return (string) $code === '00';
     }
 
     public function errors()
@@ -33,8 +38,7 @@ class SanalPosReponseGaranti implements SanalPosResponseInterface {
         if ($this->success()) {
             return [];
         }
-
-        return $this->xml->Transaction->Response;
+        return $this->xml->Transaction->Response->ErrorMsg;
     }
 
     public function response()
