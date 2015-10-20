@@ -66,7 +66,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface{
         $x['number']    = $dom->createElement('Number', $this->card['number']);
         $x['expires']   = $dom->createElement('Expires', $this->card['month'].$this->card['year']);
         $x['cvv']       = $dom->createElement('Cvv2Val', $this->card['cvv']);
-        $x['ip']        = $dom->createElement('IPAddress', (isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'192.168.1.1');
+        $x['ip']        = $dom->createElement('IPAddress', $this->getIpAddress());
         $x['total']     = $dom->createElement('Total', $this->order['total']);
         /*$x['billTo']    = $dom->createElement('BillTo');
         $x['shipTo']    = $dom->createElement('ShipTo');*/

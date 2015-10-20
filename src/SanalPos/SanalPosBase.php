@@ -7,10 +7,11 @@
  */
 namespace SanalPos;
 
-class SanalPosBase {
+class SanalPosBase
+{
     protected $mode = 'PROD';
 
-    protected $card  = [];
+    protected $card = [];
     protected $order = [];
 
     protected $transactionMode = 'Auth';
@@ -20,19 +21,19 @@ class SanalPosBase {
 
     public function setCard($number, $expMonth, $expYear, $cvv)
     {
-        $this->card['number']   = $number;
-        $this->card['month']    = str_pad($expMonth, 2, 0, STR_PAD_LEFT);
-        $this->card['year']     = str_pad($expYear, 2, 0, STR_PAD_LEFT);
-        $this->card['cvv']      = $cvv;
+        $this->card['number'] = $number;
+        $this->card['month'] = str_pad($expMonth, 2, 0, STR_PAD_LEFT);
+        $this->card['year'] = str_pad($expYear, 2, 0, STR_PAD_LEFT);
+        $this->card['cvv'] = $cvv;
     }
 
     public function setOrder($orderId, $customerEmail, $total, $taksit = '', $extra = [])
     {
         $this->order['orderId'] = $orderId;
-        $this->order['email']   = $customerEmail;
-        $this->order['total']   = $total;
-        $this->order['taksit']  = $taksit;
-        $this->order['extra']   = $extra;
+        $this->order['email'] = $customerEmail;
+        $this->order['total'] = $total;
+        $this->order['taksit'] = $taksit;
+        $this->order['extra'] = $extra;
     }
 
     /**
@@ -62,11 +63,11 @@ class SanalPosBase {
         return $this->currency;
     }
 
-    public function setCurrency($currency){
+    public function setCurrency($currency)
+    {
         // 949 TL, 840 USD, 978 EURO, 826 GBP, 392 JPY
         $availableCurrencies = [949, 840, 978, 826, 392];
-        if(!in_array($currency, $availableCurrencies))
-        {
+        if (!in_array($currency, $availableCurrencies)) {
             throw new \Exception('Currency not found!');
         }
         $this->currency = $currency;
@@ -98,5 +99,25 @@ class SanalPosBase {
     public function checkLuhn()
     {
 
+    }
+
+    public function getIpAddress()
+    {
+        $ipaddress = '';
+        if ($_SERVER['HTTP_CLIENT_IP'])
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if ($_SERVER['HTTP_X_FORWARDED_FOR'])
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if ($_SERVER['HTTP_X_FORWARDED'])
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if ($_SERVER['HTTP_FORWARDED_FOR'])
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if ($_SERVER['HTTP_FORWARDED'])
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if ($_SERVER['REMOTE_ADDR'])
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
     }
 } 

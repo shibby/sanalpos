@@ -134,7 +134,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         $dom = new DOMDocument('1.0', 'UTF-8');
         $root = $dom->createElement('GVPSRequest');
 
-        $ip = $_SERVER['REMOTE_ADDR'] ? $_SERVER['REMOTE_ADDR'] : '192.168.1.1';
+        $ip = $this->getIpAddress();
         //$ip = '192.168.1.1'; // for cli testing
 
         $x['Mode']      = $this->mode;

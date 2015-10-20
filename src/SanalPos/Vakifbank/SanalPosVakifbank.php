@@ -58,7 +58,7 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface{
         $x['TransactionDeviceSource'] = $dom->createElement('TransactionDeviceSource', 0);
 
 
-        $x['ClientIp'] = $dom->createElement('ClientIp', (isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'192.168.1.1');
+        $x['ClientIp'] = $dom->createElement('ClientIp', $this->getIpAddress());
 
         foreach($x as $node)
         {
