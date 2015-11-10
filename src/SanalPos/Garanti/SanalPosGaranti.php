@@ -11,10 +11,11 @@ use SanalPos\SanalPosBase;
 use SanalPos\SanalPosInterface;
 use DOMDocument;
 
-class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
+class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
+{
     protected $mode = 'PROD';
 
-    protected  $xml = '';
+    protected $xml = '';
 
     protected $prodServer = 'https://sanalposprov.garanti.com.tr/VPServlet';
     protected $testServer = 'https://sanalposprovtest.garanti.com.tr/VPServlet';
@@ -25,11 +26,12 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
     protected $password;
     protected $provisionUser;
 
-    public function __construct($merchantId, $terminalId, $userId, $password, $provisionUser){
+    public function __construct($merchantId, $terminalId, $userId, $password, $provisionUser)
+    {
         $this->merchantId = $merchantId;
         $this->terminalId = $terminalId;
-        $this->userId     = $userId;
-        $this->password   = $password;
+        $this->userId = $userId;
+        $this->password = $password;
         $this->provisionUser = $provisionUser;
     }
 
@@ -42,11 +44,11 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
     public function setOrder($orderId, $customerEmail, $total, $taksit = '', $extra = [])
     {
         $this->order['orderId'] = $orderId;
-        $this->order['email']   = $customerEmail;
-        $this->order['total']   = $total;
-        $this->order['taksit']  = $taksit;
-        $this->order['extra']   = $extra;
-        $this->order['total']   = $this->order['total'] * 100; // garanti 1.00 yerine 100 bekliyor
+        $this->order['email'] = $customerEmail;
+        $this->order['total'] = $total;
+        $this->order['taksit'] = $taksit;
+        $this->order['extra'] = $extra;
+        $this->order['total'] = $this->order['total'] * 100; // garanti 1.00 yerine 100 bekliyor
     }
 
     public function pay($pre = false)
@@ -54,7 +56,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         $mode = $pre ? 'preauth' : 'sales';
 
         // prepare Request data
-        $x['Transaction']=[
+        $x['Transaction'] = [
             'Type' => $mode,
             'Amount' => $this->order['total'],
             'CurrencyCode' => $this->getCurreny(),
@@ -71,7 +73,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
     {
         $this->order['orderId'] = $orderId;
 
-        $x['Transaction']=[
+        $x['Transaction'] = [
             'Type' => 'postauth',
             'Amount' => $this->order['total'],
             'CurrencyCode' => $this->getCurreny(),
@@ -101,8 +103,8 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
 
     public function refund($orderId, $amount = NULL)
     {
-        $amount = $amount ? $amount*100: $this->order['total'];
-        $x['Transaction']=[
+        $amount = $amount ? $amount * 100 : $this->order['total'];
+        $x['Transaction'] = [
             'Type' => 'void',
             'Amount' => $amount,
             'CurrencyCode' => $this->getCurreny(),
@@ -115,7 +117,8 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         return $this->send();
     }
 
-    public function send(){
+    public function send()
+    {
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->getServer());
@@ -130,15 +133,16 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         return $response;
     }
 
-    public function setXml($xmlData){
+    public function setXml($xmlData)
+    {
         $dom = new DOMDocument('1.0', 'UTF-8');
         $root = $dom->createElement('GVPSRequest');
 
         $ip = $this->getIpAddress();
         //$ip = '192.168.1.1'; // for cli testing
 
-        $x['Mode']      = $this->mode;
-        $x['Version']   = 'v0.01';
+        $x['Mode'] = $this->mode;
+        $x['Version'] = 'v0.01';
         $x['Terminal'] = [
             'ProvUserID' => $this->provisionUser,
             'HashData' => $this->createHash(),
@@ -146,32 +150,32 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
             'ID' => $this->terminalId,
             'MerchantID' => $this->merchantId
         ];
-        $x['Customer']  = [
+        $x['Customer'] = [
             'IPAddress' => $ip,
             'EmailAddress' => $this->order['email'],
-            'Description'  => ''
+            'Description' => ''
         ];
-        $x['Card']      = [
+        $x['Card'] = [
             'Number' => $this->card['number'],
-            'ExpireDate' => $this->card['month'].substr($this->card['year'],2,4),
+            'ExpireDate' => $this->card['month'] . substr($this->card['year'], 2, 4),
             'CVV2' => $this->card['cvv']
         ];
-        $x['Order']     = [
+        $x['Order'] = [
             'OrderID' => $this->order['orderId'],
             'GroupID' => ''
         ];
 
-        foreach(array_merge($x, $xmlData) as $nodeKey => $nodeValue){
-            if(is_array($nodeValue)){
+        foreach (array_merge($x, $xmlData) as $nodeKey => $nodeValue) {
+            if (is_array($nodeValue)) {
                 $node = $dom->createElement($nodeKey);
                 $root->appendChild($node);
-                foreach($nodeValue as $childKey => $childValue){
+                foreach ($nodeValue as $childKey => $childValue) {
                     $textNode = $dom->createTextNode(strval($childValue));
                     $child = $dom->createElement($childKey);
                     $child->appendChild($textNode);
                     $node->appendChild($child);
                 }
-            }else{
+            } else {
                 $textNode = $dom->createTextNode(strval($nodeValue));
                 $node = $dom->createElement($nodeKey);
                 $node->appendChild($textNode);
@@ -184,11 +188,13 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         return $this->xml;
     }
 
-    public function getXml(){
+    public function getXml()
+    {
         return $this->xml;
     }
 
-    protected function createHash(){
+    protected function createHash()
+    {
         $SecurityData = strtoupper(sha1($this->password . str_pad($this->terminalId, 9, '0', STR_PAD_LEFT)));
         $HashData = strtoupper(sha1($this->order['orderId'] . $this->terminalId . $this->card['number'] . $this->order['total'] . $SecurityData));
         return $HashData;
