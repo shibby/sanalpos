@@ -153,7 +153,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface{
         ];
         $x['Card']      = [
             'Number' => $this->card['number'],
-            'ExpireDate' => $this->card['month'].substr($this->card['year'],0,-2),
+            'ExpireDate' => $this->card['month'].$this->card['year'],
             'CVV2' => $this->card['cvv']
         ];
         $x['Order']     = [
