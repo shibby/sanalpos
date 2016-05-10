@@ -3,7 +3,7 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 01/06/14
- * Time: 00:38
+ * Time: 00:38.
  */
 namespace SanalPos\Est;
 
@@ -26,7 +26,7 @@ class SanalPosResponseEst implements SanalPosResponseInterface
         // if response code === '00'
         // then the transaction is approved
         // if code is anything other than '00' that means there's an error
-        return (string)$this->xml->ProcReturnCode === '00';
+        return (string) $this->xml->ProcReturnCode === '00';
     }
 
     public function errors()
@@ -42,4 +42,4 @@ class SanalPosResponseEst implements SanalPosResponseInterface
     {
         return $this->xml;
     }
-} 
+}

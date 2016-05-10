@@ -3,7 +3,7 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 21:28
+ * Time: 21:28.
  */
 namespace SanalPos\Garanti;
 
@@ -31,7 +31,8 @@ class SanalPosReponseGaranti implements SanalPosResponseInterface
         } else {
             $code = $this->xml->Transaction->Response->Code;
         }
-        return (string)$code === '00';
+
+        return (string) $code === '00';
     }
 
     public function errors()
