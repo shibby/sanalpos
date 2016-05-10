@@ -3,13 +3,13 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 21:39
+ * Time: 21:39.
  */
 namespace SanalPos\Est;
 
+use DOMDocument;
 use SanalPos\SanalPosBase;
 use SanalPos\SanalPosInterface;
-use DOMDocument;
 
 class SanalPosEst extends SanalPosBase implements SanalPosInterface
 {
@@ -19,11 +19,11 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
     protected $password;
 
     protected $banks = [
-        'isbank' => 'spos.isbank.com.tr',
-        'akbank' => 'www.sanalakpos.com',
-        'finansbank' => 'www.fbwebpos.com',
-        'halkbank' => 'sanalpos.halkbank.com.tr',
-        'anadolubank' => 'anadolusanalpos.est.com.tr'
+        'isbank'      => 'spos.isbank.com.tr',
+        'akbank'      => 'www.sanalakpos.com',
+        'finansbank'  => 'www.fbwebpos.com',
+        'halkbank'    => 'sanalpos.halkbank.com.tr',
+        'anadolubank' => 'anadolusanalpos.est.com.tr',
     ];
 
     protected $testServer = 'beta.asseco-see.com.tr';
@@ -42,7 +42,8 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
 
     public function getServer()
     {
-        $this->server = $this->mode == 'TEST' ? 'https://' . $this->testServer . '/fim/api' : 'https://' . $this->server . '/fim/api';
+        $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer.'/fim/api' : 'https://'.$this->server.'/fim/api';
+
         return $this->server;
     }
 
@@ -65,7 +66,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         $x['taksit'] = $dom->createElement('Taksit', $this->order['taksit']);
         $x['email'] = $dom->createElement('Email', $this->order['email']);
         $x['number'] = $dom->createElement('Number', $this->card['number']);
-        $x['expires'] = $dom->createElement('Expires', $this->card['month'] . $this->card['year']);
+        $x['expires'] = $dom->createElement('Expires', $this->card['month'].$this->card['year']);
         $x['cvv'] = $dom->createElement('Cvv2Val', $this->card['cvv']);
         $x['ip'] = $dom->createElement('IPAddress', $this->getIpAddress());
         $x['total'] = $dom->createElement('Total', $this->order['total']);
@@ -78,6 +79,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+
         return $this->send();
     }
 
@@ -98,6 +100,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+
         return $this->send();
     }
 
@@ -118,10 +121,11 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+
         return $this->send();
     }
 
-    public function refund($orderId, $amount = NULL)
+    public function refund($orderId, $amount = null)
     {
         $dom = new DOMDocument('1.0', 'ISO-8859-9');
         $root = $dom->createElement('CC5Request');
@@ -141,6 +145,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+
         return $this->send();
     }
 
@@ -150,9 +155,9 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface
         curl_setopt($curl, CURLOPT_URL, $this->getServer());
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, "data=" . $this->xml);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-type" => "application/x-www-form-urlencoded"));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, 'data='.$this->xml);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-type' => 'application/x-www-form-urlencoded']);
         $response = curl_exec($curl);
         curl_close($curl);
 

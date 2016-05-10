@@ -1,4 +1,5 @@
 <?php
+
 namespace SanalPos\Vakifbank;
 
 use SanalPos\SanalPosResponseInterface;
@@ -17,8 +18,8 @@ class SanalPosResponseBankAsya implements SanalPosResponseInterface
 
     public function success()
     {
-        if(isset($this->xml->Operation->OpData->ActionInfo->HostResponse['ResultCode'])){
-            return (string)$this->xml->Operation->OpData->ActionInfo->HostResponse['ResultCode'] === '0000';
+        if (isset($this->xml->Operation->OpData->ActionInfo->HostResponse['ResultCode'])) {
+            return (string) $this->xml->Operation->OpData->ActionInfo->HostResponse['ResultCode'] === '0000';
         }
 
         return false;
@@ -29,6 +30,7 @@ class SanalPosResponseBankAsya implements SanalPosResponseInterface
         if ($this->success()) {
             return [];
         }
+
         return $this->xml->Operation->OpData->ActionInfo->HostResponse['ResultCode'];
     }
 
@@ -36,4 +38,4 @@ class SanalPosResponseBankAsya implements SanalPosResponseInterface
     {
         return $this->xml;
     }
-} 
+}

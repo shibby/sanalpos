@@ -3,10 +3,9 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 19:47
+ * Time: 19:47.
  */
-
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 /* EST Sanal Pos Örneği
  * Test Bilgileri ile test sunucusuna gönderildi.
@@ -41,7 +40,7 @@ var_dump($result);
 $pos = new \SanalPos\Garanti\SanalPosGaranti('7000679', '30691297', 'PROVAUT', '123qweASD', 'PROVAUT');
 $pos->setCard('4282209027132016', '05', '15', '232');
 
-// 100 liralık peşin sipariş var. 
+// 100 liralık peşin sipariş var.
 $pos->setOrder('st123456789st', 'test@test.com', '100');
 $pos->setMode('TEST');
 var_dump($pos->pay());

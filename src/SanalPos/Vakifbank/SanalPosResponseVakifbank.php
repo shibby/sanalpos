@@ -1,4 +1,5 @@
 <?php
+
 namespace SanalPos\Vakifbank;
 
 use SanalPos\SanalPosResponseInterface;
@@ -20,7 +21,7 @@ class SanalPosResponseVakifbank implements SanalPosResponseInterface
         // if response code === '00'
         // then the transaction is approved
         // if code is anything other than '00' that means there's an error
-        return (string)$this->xml->ResultCode === '0000';
+        return (string) $this->xml->ResultCode === '0000';
     }
 
     public function errors()
@@ -36,4 +37,4 @@ class SanalPosResponseVakifbank implements SanalPosResponseInterface
     {
         return $this->xml;
     }
-} 
+}

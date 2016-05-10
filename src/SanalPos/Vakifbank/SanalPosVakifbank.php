@@ -1,9 +1,10 @@
 <?php
+
 namespace SanalPos\Vakifbank;
 
+use DOMDocument;
 use SanalPos\SanalPosBase;
 use SanalPos\SanalPosInterface;
-use DOMDocument;
 
 class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
 {
@@ -32,7 +33,8 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
 
     public function getServer()
     {
-        $this->server = $this->mode == 'TEST' ? 'https://' . $this->testServer : 'https://' . $this->server;
+        $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer : 'https://'.$this->server;
+
         return $this->server;
     }
 
@@ -55,9 +57,8 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
 
         $x['Pan'] = $dom->createElement('Pan', $this->card['number']);
         $x['Cvv'] = $dom->createElement('Cvv', $this->card['cvv']);
-        $x['Expiry'] = $dom->createElement('Expiry', $this->card['year'] . $this->card['month']);
+        $x['Expiry'] = $dom->createElement('Expiry', $this->card['year'].$this->card['month']);
         $x['TransactionDeviceSource'] = $dom->createElement('TransactionDeviceSource', 0);
-
 
         $x['ClientIp'] = $dom->createElement('ClientIp', $this->getIpAddress());
 
@@ -67,22 +68,20 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
+
         return $this->send();
     }
 
     public function postAuth($orderId)
     {
-
     }
 
     public function cancel($orderId)
     {
-
     }
 
-    public function refund($orderId, $amount = NULL)
+    public function refund($orderId, $amount = null)
     {
-
     }
 
     public function send()
@@ -91,9 +90,9 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
         curl_setopt($curl, CURLOPT_URL, $this->getServer());
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, "prmstr=" . $this->xml);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-type" => "application/x-www-form-urlencoded"));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, 'prmstr='.$this->xml);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-type' => 'application/x-www-form-urlencoded']);
         $response = curl_exec($curl);
         curl_close($curl);
 
