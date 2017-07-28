@@ -51,6 +51,10 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
 
     public function pay($pre = false, $successURL = null, $failureUrl = null)
     {
+        if ($this->bank === 'vakifbank_3d') {
+            return $this->send3d($successURL, $failureUrl);
+        }
+
         $dom = new DOMDocument('1.0', 'ISO-8859-9');
         $root = $dom->createElement('VposRequest');
         $x['MerchantId'] = $dom->createElement('MerchantId', $this->merchantId);
@@ -70,11 +74,6 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
         $x['Cvv'] = $dom->createElement('Cvv', $this->card['cvv']);
         $x['Expiry'] = $dom->createElement('Expiry', $this->card['year'].$this->card['month']);
         $x['TransactionDeviceSource'] = $dom->createElement('TransactionDeviceSource', 0);
-        if ($this->bank === 'vakifbank_3d') {
-            $x['ECI'] = $dom->createElement('ECI', 05);
-            $x['CAVV'] = $dom->createElement('CAVV', 'asfa435redf');
-            $x['MpiTransactionId'] = $dom->createElement('MpiTransactionId', '5d6b951b06fa043379458dc835b71d0c8');
-        }
 
         if ($successURL) {
             $x['SuccessUrl'] = $dom->createElement('SuccessUrl', $successURL);
@@ -91,10 +90,6 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
-
-        if ($this->bank === 'vakifbank_3d') {
-            return $this->send3d($successURL, $failureUrl);
-        }
 
         return $this->send();
     }
@@ -126,9 +121,53 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface
         return $response;
     }
 
+    public function provision3d(array $postData)
+    {
+        $dom = new DOMDocument('1.0', 'ISO-8859-9');
+        $root = $dom->createElement('VposRequest');
+        $x['MerchantId'] = $dom->createElement('MerchantId', $this->merchantId);
+        $x['TerminalNo'] = $dom->createElement('TerminalNo', $this->terminalNo);
+        $x['Password'] = $dom->createElement('Password', $this->password);
+
+        $x['TransactionType'] = $dom->createElement('TransactionType', 'Sale');
+        $x['TransactionId'] = $dom->createElement('TransactionId', $this->order['orderId']);
+
+        if ($this->order['taksit']) {
+            $x['NumberOfInstallments'] = $dom->createElement('NumberOfInstallments', $this->order['taksit']);
+        }
+        if (!empty($postData['Cvv'])) {
+            $x['Cvv'] = $dom->createElement('Cvv', $postData['Cvv']);
+        }
+        if (!empty($postData['PurchAmount'])) {
+            $x['CurrencyAmount'] = $dom->createElement('CurrencyAmount', $postData['PurchAmount']);
+            $x['CurrencyCode'] = $dom->createElement('CurrencyCode', 949); //TODO: set currencycode parameter
+        }
+        if (!empty($postData['Pan'])) {
+            $x['Pan'] = $dom->createElement('Pan', $postData['Pan']);
+        }
+        if (!empty($postData['Expiry'])) {
+            $x['Expiry'] = $dom->createElement('Expiry', '20'.$postData['Expiry']);
+        }
+
+        $x['TransactionDeviceSource'] = $dom->createElement('TransactionDeviceSource', 0);
+        $x['MpiTransactionId'] = $dom->createElement('MpiTransactionId', $postData['VerifyEnrollmentRequestId']);
+
+        $x['ECI'] = $dom->createElement('ECI', $postData['Eci']);
+        $x['CAVV'] = $dom->createElement('CAVV', $postData['Cavv']);
+        $x['ClientIp'] = $dom->createElement('ClientIp', $this->getIpAddress());
+
+        foreach ($x as $node) {
+            $root->appendChild($node);
+        }
+        $dom->appendChild($root);
+
+        $this->xml = $dom->saveXML();
+
+        return $this->send();
+    }
+
     private function send3d($successUrl, $failureUrl)
     {
-        $this->password = 'Sf46DdWt'; //TODO:
         //$kartTipi = $_POST['BrandName'];
         //$islemNumarasi = $_POST['VerifyEnrollmentRequestId'];
         $islemNumarasi = str_random();
