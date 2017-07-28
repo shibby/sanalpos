@@ -3,13 +3,13 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 18:24.
+ * Time: 18:24
  */
 namespace SanalPos\Garanti;
 
-use DOMDocument;
 use SanalPos\SanalPosBase;
 use SanalPos\SanalPosInterface;
+use DOMDocument;
 
 class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
 {
@@ -38,7 +38,6 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
     public function getServer()
     {
         $this->server = $this->mode == 'TEST' ? $server = $this->testServer : $this->prodServer;
-
         return $this->server;
     }
 
@@ -58,16 +57,15 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
 
         // prepare Request data
         $x['Transaction'] = [
-            'Type'                  => $mode,
-            'Amount'                => $this->order['total'],
-            'CurrencyCode'          => $this->getCurreny(),
+            'Type' => $mode,
+            'Amount' => $this->order['total'],
+            'CurrencyCode' => $this->getCurreny(),
             'CardholderPresentCode' => 0,
-            'MotoInd'               => 'N',
-            'InstallmentCnt'        => $this->order['taksit'],
+            'MotoInd' => 'N',
+            'InstallmentCnt' => $this->order['taksit']
         ];
 
         $this->setXml($x);
-
         return $this->send();
     }
 
@@ -76,59 +74,57 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $this->order['orderId'] = $orderId;
 
         $x['Transaction'] = [
-            'Type'                  => 'postauth',
-            'Amount'                => $this->order['total'],
-            'CurrencyCode'          => $this->getCurreny(),
+            'Type' => 'postauth',
+            'Amount' => $this->order['total'],
+            'CurrencyCode' => $this->getCurreny(),
             'CardholderPresentCode' => 0,
-            'MotoInd'               => 'H',
-            'InstallmentCnt'        => $this->order['taksit'],
+            'MotoInd' => 'H',
+            'InstallmentCnt' => $this->order['taksit']
         ];
 
         $this->setXml($x);
-
         return $this->send();
     }
 
     public function cancel($orderId)
     {
         $x['Transaction'] = [
-            'Type'                  => 'void',
-            'Amount'                => $this->order['total'],
-            'CurrencyCode'          => $this->getCurreny(),
+            'Type' => 'void',
+            'Amount' => $this->order['total'],
+            'CurrencyCode' => $this->getCurreny(),
             'CardholderPresentCode' => 0,
-            'MotoInd'               => 'N',
-            'InstallmentCnt'        => $this->order['taksit'],
+            'MotoInd' => 'N',
+            'InstallmentCnt' => $this->order['taksit']
         ];
 
         $this->setXml($x);
-
         return $this->send();
     }
 
-    public function refund($orderId, $amount = null)
+    public function refund($orderId, $amount = NULL)
     {
         $amount = $amount ? $amount * 100 : $this->order['total'];
         $x['Transaction'] = [
-            'Type'                  => 'void',
-            'Amount'                => $amount,
-            'CurrencyCode'          => $this->getCurreny(),
+            'Type' => 'void',
+            'Amount' => $amount,
+            'CurrencyCode' => $this->getCurreny(),
             'CardholderPresentCode' => 0,
-            'MotoInd'               => 'N',
-            'InstallmentCnt'        => $this->order['taksit'],
+            'MotoInd' => 'N',
+            'InstallmentCnt' => $this->order['taksit']
         ];
 
         $this->setXml($x);
-
         return $this->send();
     }
 
     public function send()
     {
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->getServer());
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'data='.$this->xml);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "data=" . $this->xml);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         $response = curl_exec($ch);
@@ -149,24 +145,24 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $x['Version'] = 'v0.01';
         $x['Terminal'] = [
             'ProvUserID' => $this->provisionUser,
-            'HashData'   => $this->createHash(),
-            'UserID'     => $this->provisionUser,
-            'ID'         => $this->terminalId,
-            'MerchantID' => $this->merchantId,
+            'HashData' => $this->createHash(),
+            'UserID' => $this->provisionUser,
+            'ID' => $this->terminalId,
+            'MerchantID' => $this->merchantId
         ];
         $x['Customer'] = [
-            'IPAddress'    => $ip,
+            'IPAddress' => $ip,
             'EmailAddress' => $this->order['email'],
-            'Description'  => '',
+            'Description' => ''
         ];
         $x['Card'] = [
-            'Number'     => $this->card['number'],
-            'ExpireDate' => $this->card['month'].substr($this->card['year'], 2, 4),
-            'CVV2'       => $this->card['cvv'],
+            'Number' => $this->card['number'],
+            'ExpireDate' => $this->card['month'] . substr($this->card['year'], 2, 4),
+            'CVV2' => $this->card['cvv']
         ];
         $x['Order'] = [
             'OrderID' => $this->order['orderId'],
-            'GroupID' => '',
+            'GroupID' => ''
         ];
 
         foreach (array_merge($x, $xmlData) as $nodeKey => $nodeValue) {
@@ -189,7 +185,6 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $dom->appendChild($root);
 
         $this->xml = $dom->saveXML();
-
         return $this->xml;
     }
 
@@ -200,9 +195,8 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
 
     protected function createHash()
     {
-        $SecurityData = strtoupper(sha1($this->password.str_pad($this->terminalId, 9, '0', STR_PAD_LEFT)));
-        $HashData = strtoupper(sha1($this->order['orderId'].$this->terminalId.$this->card['number'].$this->order['total'].$SecurityData));
-
+        $SecurityData = strtoupper(sha1($this->password . str_pad($this->terminalId, 9, '0', STR_PAD_LEFT)));
+        $HashData = strtoupper(sha1($this->order['orderId'] . $this->terminalId . $this->card['number'] . $this->order['total'] . $SecurityData));
         return $HashData;
     }
 }

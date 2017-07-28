@@ -89,12 +89,6 @@ success: İşlem başarılı ise true aksi takdirde false döner
 errors: Alınan hata mesajı döner
 response: Alınan XML cevabı olduğu gibi döndürür.
 
-## BankAsya
-```php
-// Sınıfı initialize et
-$bankAsyaPos = new \SanalPos\Garanti\SanalPosBankAsya('bankasya','merchantId','merchantPassword');
-
-```
 ## Garanti Bankası
 Garanti sınıfı da yukarıdakine benzer şekilde kullanılmaktadır.
 Fark olarak banka ismi gerekmez ama banka tarafından verilen bilgiler girilir. Bunlar sırasıyla;

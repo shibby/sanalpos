@@ -3,8 +3,9 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 18:08.
+ * Time: 18:08
  */
+
 namespace SanalPos;
 
 interface SanalPosInterface
@@ -25,7 +26,7 @@ interface SanalPosInterface
 
     public function postAuth($orderId);
 
-    public function refund($orderId, $amount = null);
+    public function refund($orderId, $amount = NULL);
 
     public function cancel($orderId);
-}
+} 

@@ -3,7 +3,7 @@
  * Created by Sinan Taga.
  * User: sinan
  * Date: 31/05/14
- * Time: 18:21.
+ * Time: 18:21
  */
 namespace SanalPos;
 
@@ -38,8 +38,7 @@ class SanalPosBase
 
     /**
      * Gets the operation mode
-     * TEST for test mode.
-     *
+     * TEST for test mode
      * @return mixed
      */
     public function getMode()
@@ -49,16 +48,13 @@ class SanalPosBase
 
     /**
      * Gets the operation mode
-     * TEST for test mode everything else is production mode.
-     *
+     * TEST for test mode everything else is production mode
      * @param $mode
-     *
      * @return mixed
      */
     public function setMode($mode)
     {
         $this->mode = $mode;
-
         return $this->mode;
     }
 
@@ -75,21 +71,23 @@ class SanalPosBase
             throw new \Exception('Currency not found!');
         }
         $this->currency = $currency;
-
         return $this->getCurreny;
     }
 
     public function check()
     {
+
         return true;
     }
 
     public function checkExpiration()
     {
+
     }
 
     public function checkCard()
     {
+
     }
 
     public function checkCvv()
@@ -100,27 +98,26 @@ class SanalPosBase
 
     public function checkLuhn()
     {
+
     }
 
     public function getIpAddress()
     {
         $ipaddress = '';
-        if (isset($_SERVER['HTTP_CLIENT_IP']) && $_SERVER['HTTP_CLIENT_IP']) {
+        if (isset($_SERVER['HTTP_CLIENT_IP']) && $_SERVER['HTTP_CLIENT_IP'])
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+        else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'])
             $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED']) && $_SERVER['HTTP_X_FORWARDED']) {
+        else if (isset($_SERVER['HTTP_X_FORWARDED']) && $_SERVER['HTTP_X_FORWARDED'])
             $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']) && $_SERVER['HTTP_FORWARDED_FOR']) {
+        else if (isset($_SERVER['HTTP_FORWARDED_FOR']) && $_SERVER['HTTP_FORWARDED_FOR'])
             $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED']) && $_SERVER['HTTP_FORWARDED']) {
+        else if (isset($_SERVER['HTTP_FORWARDED']) && $_SERVER['HTTP_FORWARDED'])
             $ipaddress = $_SERVER['HTTP_FORWARDED'];
-        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'])
             $ipaddress = $_SERVER['REMOTE_ADDR'];
-        } else {
+        else
             $ipaddress = 'UNKNOWN';
-        }
-
         return $ipaddress;
     }
-}
+} 
