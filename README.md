@@ -1,9 +1,10 @@
 #Garanti ve Est Sanal Pos
 ------------------------
 
-Garanti Bankası ve EST destekleyen bankalar (İş Bankası, Akbank, Finansbank, Halk Bankası ve Anadolubank) için Sanal Pos sınıfları.
+Garanti Bankası, Bank Asya, Vakıf Bank ve EST destekleyen bankalar (İş Bankası, Akbank, Finansbank, Halk Bankası ve Anadolubank) için Sanal Pos sınıfları.
 
-Şu an sadece normal API için uygulamaları bulunuyor. 3D uygulamaları şu an bulunmamaktadır.
+Şu an sadece normal API için uygulamaları bulunuyor.
+Yalnızca VakıfBank için 3D methodları bulunmaktadır. 
 
 #Kurulum
 Composer ile

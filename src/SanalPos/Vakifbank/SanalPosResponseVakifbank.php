@@ -2,10 +2,11 @@
 
 namespace SanalPos\Vakifbank;
 
+use SanalPos\SanalPos3DResponseInterface;
 use SanalPos\SanalPosResponseInterface;
 use SimpleXMLElement;
 
-class SanalPosResponseVakifbank implements SanalPosResponseInterface
+class SanalPosResponseVakifbank implements SanalPosResponseInterface, SanalPos3DResponseInterface
 {
     protected $response;
     protected $xml;
@@ -44,6 +45,22 @@ class SanalPosResponseVakifbank implements SanalPosResponseInterface
 
     public function threeD()
     {
+        return $this->get3DHtml();
+    }
+
+    public function response()
+    {
+        return $this->xml;
+    }
+
+    /**
+     * işlemin başarılı olması durumunda, buradaki html kodu ekrana basılacak.
+     * bu ekrana basılan kod, otomatik olarak 3d doğrulama sayfasına yönlendirecek bizi.
+     *
+     * @return string
+     */
+    public function get3DHtml()
+    {
         $acsUrl = $this->xml->Message->VERes->ACSUrl;
         $paReq = $this->xml->Message->VERes->PaReq;
         $termUrl = $this->xml->Message->VERes->TermUrl;
@@ -56,10 +73,5 @@ class SanalPosResponseVakifbank implements SanalPosResponseInterface
         $html .= '<SCRIPT LANGUAGE="Javascript">document.downloadForm.submit();</SCRIPT>';
 
         return $html;
-    }
-
-    public function response()
-    {
-        return $this->xml;
     }
 }
