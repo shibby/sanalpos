@@ -19,14 +19,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "ekrembk/sanal-pos": "dev-master"
+        "shibby/ekrembk-sanal-pos": "dev-master"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/shibby/ekrembk-sanal-pos"
-        }
-    ],
     "autoload": {
         "psr-0": {
             "SanalPos": "src/"
