@@ -4,6 +4,8 @@
     "description": "Garanti Bankası ve EST destekleyen bankalar (İş Bankası, Akbank, Finansbank, Halk Bankası ve Anadolubank) için Sanal Pos sınıfları.",
     "keywords": ["sanalpos", "online pos"],
     "homepage": "http://github.com/shibby/sanalpos",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Sinan Taga",
@@ -16,8 +18,15 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ekrembk/sanal-pos": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/shibby/ekrembk-sanal-pos"
+        }
+    ],
     "autoload": {
         "psr-0": {
             "SanalPos": "src/"
