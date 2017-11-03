@@ -85,7 +85,7 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
         if ($this->bank === 'yapikredi_3d') {
             //$host= ($this->mode == 'TEST') ? 'test_3d' : 'production_3d';
             $posnet = new \PosnetOOS(
-                $this->posnetId, //todo:
+                $this->posnetId,
                 $this->merchantId,
                 $this->terminalId,
                 $this->username,
