@@ -17,11 +17,16 @@ class SanalPosResponseYapiKredi implements SanalPosResponseInterface, SanalPos3D
      * @var
      */
     private $merchantReturnUrl;
+    /**
+     * @var
+     */
+    private $mode;
 
-    public function __construct($response, $merchantReturnUrl)
+    public function __construct($response, $merchantReturnUrl, $mode)
     {
         $this->response = $response;
         $this->merchantReturnUrl = $merchantReturnUrl;
+        $this->mode = $mode;
     }
 
     public function success()
@@ -92,6 +97,10 @@ class SanalPosResponseYapiKredi implements SanalPosResponseInterface, SanalPos3D
         $posnetid = $this->response->merchantInfo->posnetid;
 
         $postUrl = 'http://setmpos.ykb.com/3DSWebService/YKBPaymentService';
+        if ($this->mode !== 'TEST') {
+            $postUrl = 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService';
+        }
+        //todo: make config these urls.
 
         $html = '<form name="downloadForm" action="'.$postUrl.'" method="POST">';
         $html .= '

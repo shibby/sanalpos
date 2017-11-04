@@ -14,8 +14,8 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
     protected $posnetId;
 
     protected $banks = [
-        'yapikredi' => 'http://posnet.ykb.com/PosnetWebService/XML',
-        'yapikredi_3d' => 'http://posnet.ykb.com/3DSWebService/YKBPaymentService',
+        'yapikredi' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
+        'yapikredi_3d' => 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService',
     ];
 
     protected $testServer = 'http://setmpos.ykb.com/PosnetWebService/XML';
@@ -73,9 +73,9 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
     public function getServer()
     {
         if ($this->bank === 'yapikredi') {
-            $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer : 'https://'.$this->server;
+            $this->server = $this->mode == 'TEST' ? $this->testServer : $this->banks['yapikredi'];
         } elseif ($this->bank === 'yapikredi_3d') {
-            $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer3d : 'https://'.$this->server;
+            $this->server = $this->mode == 'TEST' ? $this->testServer3d : $this->banks['yapikredi_3d'];
         }
 
         return $this->server;
@@ -187,7 +187,7 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
         //$posnetOOS->SetDebugLevel(1);
 
         $posnetOOS->SetURL(
-            $this->mode === 'TEST' ? $this->testServer : $this->server
+            $this->mode === 'TEST' ? $this->testServer : $this->banks['yapikredi']
         );
 
         if (!$posnetOOS->CheckAndResolveMerchantData(
