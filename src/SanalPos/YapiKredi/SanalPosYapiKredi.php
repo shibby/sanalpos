@@ -26,6 +26,10 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
     private $bank;
     private $username;
     private $password;
+    /**
+     * @var
+     */
+    private $key;
 
     /**
      * SanalPosYapiKredi constructor.
@@ -34,11 +38,21 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
      * @param $merchantId
      * @param $terminalId
      * @param $posnetId
+     * @param $username
+     * @param $password
+     * @param $key
      *
      * @throws \Exception
      */
-    public function __construct($bank, $merchantId, $terminalId, $posnetId, $username, $password)
-    {
+    public function __construct(
+        $bank,
+        $merchantId,
+        $terminalId,
+        $posnetId,
+        $username,
+        $password,
+        $key
+    ) {
         if (!array_key_exists($bank, $this->banks)) {
             throw new \Exception('Bilinmeyen Banka');
         } else {
@@ -50,6 +64,10 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
         $this->username = $username;
         $this->password = $password;
         $this->bank = $bank;
+        if ($this->mode === 'TEST') {
+            $key = '10,10,10,10,10,10,10,10';
+        }
+        $this->key = $key;
     }
 
     public function getServer()
@@ -89,7 +107,8 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
                 $this->merchantId,
                 $this->terminalId,
                 $this->username,
-                $this->password
+                $this->password,
+                $this->key
             );
         }
 
@@ -162,7 +181,8 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
             $this->merchantId,
             $this->terminalId,
             $this->username,
-            $this->password
+            $this->password,
+            $this->key
         );
         //$posnetOOS->SetDebugLevel(1);
 
