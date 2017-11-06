@@ -98,7 +98,7 @@ class SanalPosResponseYapiKredi implements SanalPosResponseInterface, SanalPos3D
 
         $postUrl = 'http://setmpos.ykb.com/3DSWebService/YKBPaymentService';
         if ($this->mode !== 'TEST') {
-            $postUrl = 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService';
+            $postUrl = 'https://posnet.ykb.com/3DSWebService/YKBPaymentService';
         }
         //todo: make config these urls.
 

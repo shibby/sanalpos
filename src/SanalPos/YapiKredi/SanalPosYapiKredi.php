@@ -14,8 +14,8 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
     protected $posnetId;
 
     protected $banks = [
-        'yapikredi' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
-        'yapikredi_3d' => 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService',
+        'yapikredi' => 'https://posnet.ykb.com/PosnetWebService/XML',
+        'yapikredi_3d' => 'https://posnet.ykb.com/3DSWebService/YKBPaymentService',
     ];
 
     protected $testServer = 'http://setmpos.ykb.com/PosnetWebService/XML';
