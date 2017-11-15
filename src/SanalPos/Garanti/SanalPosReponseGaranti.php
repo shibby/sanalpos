@@ -41,10 +41,10 @@ class SanalPosReponseGaranti implements SanalPosResponseInterface
         if ($this->success()) {
             return [];
         }
-        if ($this->xml->Transaction->Response->SysErrMsg) {
-            return $this->xml->Transaction->Response->SysErrMsg;
-        } else {
+        if (@$this->xml->Transaction->Response->ErrorMsg) {
             return $this->xml->Transaction->Response->ErrorMsg;
+        } else {
+            return @$this->xml->Transaction->Response->SysErrMsg;
         }
     }
 
