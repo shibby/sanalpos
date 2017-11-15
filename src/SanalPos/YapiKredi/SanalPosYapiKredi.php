@@ -213,7 +213,19 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
                     ];
                 }
             }
-            if ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['approved']) {
+            if ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['approved'] == 2) {
+                return [
+                    'status' => false,
+                    'message' => '#'.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['respCode'].': '.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['respText'],
+                ];
+            } elseif ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['approved'] == 1) {
+                if ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdStatus'] == '0') {
+                    return [
+                        'status' => false,
+                        'message' => 'Ödeme işleminde bir hata oluştu: '.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdErrorMessage'],
+                    ];
+                }
+
                 return [
                     'status' => true,
                 ];
