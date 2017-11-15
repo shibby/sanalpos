@@ -22,18 +22,20 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
     protected $testServer = 'https://sanalposprovtest.garanti.com.tr/VPServlet';
 
     protected $merchantId;
+    protected $subMerchantId;
     protected $terminalId;
     protected $userId;
     protected $password;
     protected $provisionUser;
 
-    public function __construct($merchantId, $terminalId, $userId, $password, $provisionUser)
+    public function __construct($merchantId, $terminalId, $userId, $password, $provisionUser, $subMerchantId = null)
     {
         $this->merchantId = $merchantId;
         $this->terminalId = $terminalId;
         $this->userId = $userId;
         $this->password = $password;
         $this->provisionUser = $provisionUser;
+        $this->subMerchantId = $subMerchantId;
     }
 
     public function getServer()
@@ -155,6 +157,9 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
             'ID' => $this->terminalId,
             'MerchantID' => $this->merchantId,
         ];
+        if ($this->subMerchantId) {
+            $x['Terminal']['SubMerchantID'] = $this->subMerchantId;
+        }
         $x['Customer'] = [
             'IPAddress' => $ip,
             'EmailAddress' => $this->order['email'],
