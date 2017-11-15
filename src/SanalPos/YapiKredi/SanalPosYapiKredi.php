@@ -200,10 +200,15 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
                 'message' => $posnetOOS->GetLastErrorMessage(),
             ];
         } else {
-            if (!$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdStatus'] == '1') {
+            if ($posnetOOS->posnetOOSResponse->tds_md_status != '1') {
+                $message = $posnetOOS->posnetOOSResponse->tds_md_errormessage;
+                if (!$message) {
+                    $message = @$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdErrorMessage'];
+                }
+
                 return [
                     'status' => false,
-                    'message' => 'Ödeme işleminde bir hata oluştu: '.@$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdErrorMessage'],
+                    'message' => 'Ödeme işleminde bir hata oluştu: '.$message,
                 ];
             }
             $availablePoint = $posnetOOS->GetTotalPointAmount();
