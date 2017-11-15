@@ -200,6 +200,12 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
                 'message' => $posnetOOS->GetLastErrorMessage(),
             ];
         } else {
+            if (!$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdStatus'] == '1') {
+                return [
+                    'status' => false,
+                    'message' => 'Ödeme işleminde bir hata oluştu: '.@$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdErrorMessage'],
+                ];
+            }
             $availablePoint = $posnetOOS->GetTotalPointAmount();
 
             if (!$posnetOOS->ConnectAndDoTDSTransaction($merchantPacket,
@@ -213,23 +219,10 @@ class SanalPosYapiKredi extends SanalPosBase implements SanalPosInterface, Sanal
                     ];
                 }
             }
-            if ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['approved'] == 2) {
-                return [
-                    'status' => false,
-                    'message' => '#'.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['respCode'].': '.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['respText'],
-                ];
-            } elseif ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['approved'] == 1) {
-                if ($posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdStatus'] == '0') {
-                    return [
-                        'status' => false,
-                        'message' => 'Ödeme işleminde bir hata oluştu: '.$posnetOOS->arrayPosnetResponseXML['posnetResponse']['oosResolveMerchantDataResponse']['mdErrorMessage'],
-                    ];
-                }
 
-                return [
-                    'status' => true,
-                ];
-            }
+            return [
+                'status' => true,
+            ];
 
             return [
                 'status' => false,
