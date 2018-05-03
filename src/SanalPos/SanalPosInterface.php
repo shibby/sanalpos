@@ -22,7 +22,7 @@ interface SanalPosInterface
 
     public function getServer();
 
-    public function pay($pre = false);
+    public function pay($pre = false, $successUrl, $failureUrl);
 
     public function postAuth($orderId);
 

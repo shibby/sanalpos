@@ -8,26 +8,38 @@
 
 namespace SanalPos\Est;
 
+use SanalPos\SanalPos3DResponseInterface;
 use SanalPos\SanalPosResponseInterface;
 use SimpleXMLElement;
 
-class SanalPosResponseEst implements SanalPosResponseInterface
+class SanalPosResponseEst implements SanalPosResponseInterface, SanalPos3DResponseInterface
 {
     protected $response;
     protected $xml;
 
+    private $is3D = false;
+
     public function __construct($response)
     {
         $this->response = $response;
-        $this->xml = new SimpleXMLElement($response);
+        //dd($this->response);
+        try {
+            $this->xml = new SimpleXMLElement($response);
+        } catch (\Exception $exception) {
+            $this->is3D = true;
+        }
     }
 
     public function success()
     {
+        if ($this->is3D) {
+            return true;
+        }
+
         // if response code === '00'
         // then the transaction is approved
         // if code is anything other than '00' that means there's an error
-        return (string) $this->xml->ProcReturnCode === '00';
+        return '00' === (string) $this->xml->ProcReturnCode;
     }
 
     public function errors()
@@ -42,5 +54,21 @@ class SanalPosResponseEst implements SanalPosResponseInterface
     public function response()
     {
         return $this->xml;
+    }
+
+    /**
+     * işlemin başarılı olması durumunda, buradaki html kodu ekrana basılacak.
+     * bu ekrana basılan kod, otomatik olarak 3d doğrulama sayfasına yönlendirecek bizi.
+     *
+     * @return string
+     */
+    public function get3DHtml()
+    {
+        return $this->response;
+    }
+
+    public function threeD()
+    {
+        return $this->get3DHtml();
     }
 }

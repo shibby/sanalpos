@@ -30,12 +30,12 @@ class SanalPosBankAsya extends SanalPosBase implements SanalPosInterface
 
     public function getServer()
     {
-        $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer : 'https://'.$this->server;
+        $this->server = 'TEST' == $this->mode ? 'https://'.$this->testServer : 'https://'.$this->server;
 
         return $this->server;
     }
 
-    public function pay($pre = false)
+    public function pay($pre = false, $successUrl = null, $failureUrl = null)
     {
         //TODO: domelement ile oluştur.
         $xml = '<?xml version="1.0" encoding="ISO-8859-9" ?>

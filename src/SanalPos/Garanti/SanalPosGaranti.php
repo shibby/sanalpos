@@ -40,7 +40,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
 
     public function getServer()
     {
-        $this->server = $this->mode == 'TEST' ? $server = $this->testServer : $this->prodServer;
+        $this->server = 'TEST' == $this->mode ? $server = $this->testServer : $this->prodServer;
 
         return $this->server;
     }
@@ -55,7 +55,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $this->order['total'] = $this->order['total'] * 100; // garanti 1.00 yerine 100 bekliyor
     }
 
-    public function pay($pre = false)
+    public function pay($pre = false, $successUrl = null, $failureUrl = null)
     {
         $mode = $pre ? 'preauth' : 'sales';
 
