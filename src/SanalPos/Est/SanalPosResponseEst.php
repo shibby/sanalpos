@@ -22,7 +22,14 @@ class SanalPosResponseEst implements SanalPosResponseInterface, SanalPos3DRespon
     public function __construct($response)
     {
         $this->response = $response;
-        //dd($this->response);
+
+        try {
+            $html = new \DOMDocument();
+            $html->loadHTML($response);
+            $this->is3D = true;
+        } catch (\Exception $exception) {
+        }
+
         try {
             $this->xml = new SimpleXMLElement($response);
         } catch (\Exception $exception) {
