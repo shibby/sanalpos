@@ -441,7 +441,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
 
             if ('Approved' === $Response) {
                 return [
-                    'success' => true,
+                    'status' => true,
                     'message' => 'Ödeme isleminiz basariyla gerçeklestirildi',
                 ];
             } else {
