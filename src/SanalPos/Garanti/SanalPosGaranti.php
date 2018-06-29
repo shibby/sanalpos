@@ -63,7 +63,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $x['Transaction'] = [
             'Type' => $mode,
             'Amount' => $this->order['total'],
-            'CurrencyCode' => $this->getCurreny(),
+            'CurrencyCode' => $this->getCurrency(),
             'CardholderPresentCode' => 0,
             'MotoInd' => 'N',
             'InstallmentCnt' => $this->order['taksit'],
@@ -81,7 +81,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $x['Transaction'] = [
             'Type' => 'postauth',
             'Amount' => $this->order['total'],
-            'CurrencyCode' => $this->getCurreny(),
+            'CurrencyCode' => $this->getCurrency(),
             'CardholderPresentCode' => 0,
             'MotoInd' => 'H',
             'InstallmentCnt' => $this->order['taksit'],
@@ -97,7 +97,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $x['Transaction'] = [
             'Type' => 'void',
             'Amount' => $this->order['total'],
-            'CurrencyCode' => $this->getCurreny(),
+            'CurrencyCode' => $this->getCurrency(),
             'CardholderPresentCode' => 0,
             'MotoInd' => 'N',
             'InstallmentCnt' => $this->order['taksit'],
@@ -114,7 +114,7 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         $x['Transaction'] = [
             'Type' => 'void',
             'Amount' => $amount,
-            'CurrencyCode' => $this->getCurreny(),
+            'CurrencyCode' => $this->getCurrency(),
             'CardholderPresentCode' => 0,
             'MotoInd' => 'N',
             'InstallmentCnt' => $this->order['taksit'],

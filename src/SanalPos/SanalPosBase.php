@@ -63,9 +63,17 @@ class SanalPosBase
         return $this->mode;
     }
 
-    public function getCurreny()
+    public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * DEPRECATED: use getCurrency method
+     */
+    public function getCurreny()
+    {
+        return $this->getCurrency();
     }
 
     public function setCurrency($currency)
@@ -77,7 +85,7 @@ class SanalPosBase
         }
         $this->currency = $currency;
 
-        return $this->getCurreny;
+        return $this->getCurrency;
     }
 
     public function check()
