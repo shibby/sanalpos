@@ -85,7 +85,7 @@ class SanalPosBase
         }
         $this->currency = $currency;
 
-        return $this->getCurrency;
+        return $this->getCurrency();
     }
 
     public function check()
