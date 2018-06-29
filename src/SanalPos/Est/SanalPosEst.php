@@ -110,7 +110,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
             $x['total'] = $dom->createElement('Total', $this->order['total']);
             $x['clientId'] = $dom->createElement('ClientId', $this->clientId);
         }
-        $x['currency'] = $dom->createElement('Currency', $this->getCurreny());
+        $x['currency'] = $dom->createElement('Currency', $this->getCurrency());
 
         $x['email'] = $dom->createElement('Email', $this->order['email']);
 
