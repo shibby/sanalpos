@@ -11,7 +11,6 @@ class SanalPosResponseKuveytTurk implements SanalPosResponseInterface, SanalPos3
      * @var Sonuc
      */
     protected $response;
-    protected $xml;
     private $is3D = false;
     /**
      * @var
@@ -27,29 +26,15 @@ class SanalPosResponseKuveytTurk implements SanalPosResponseInterface, SanalPos3
         $this->response = $response;
         $this->merchantReturnUrl = $merchantReturnUrl;
         $this->mode = $mode;
+
+        $this->is3D = true;
     }
 
     public function success()
     {
-        if (!$this->response) {
+        if (!$this->response || !$this->response['status']) {
             return false;
         }
-
-        if ($this->response instanceof \PosnetOOS) {
-            $this->is3D = true;
-
-            return @$this->response->arrayPosnetResponseXML['posnetResponse']['approved'];
-        }
-
-        if (!$this->response->posnet->posnetResponse->approved) {
-            return false;
-        }
-
-        /*if (@$this->xml->Message) {
-            $this->is3D = true;
-
-            return $this->xml->Message->VERes->Status && $this->xml->Message->VERes->Status->__toString() === 'Y';
-        }*/
 
         return true;
     }
@@ -62,13 +47,8 @@ class SanalPosResponseKuveytTurk implements SanalPosResponseInterface, SanalPos3
         if ($this->success()) {
             return [];
         }
-        if ($this->is3D) {
-            return @$this->response->respText;
-        }
 
-        $message = $this->response->posnet->arrayPosnetResponseXML['posnetResponse']['respText'];
-
-        return substr(mb_convert_encoding($message, 'UTF-8'), 0, 50);
+        return $this->response['message'];
     }
 
     public function threeD()
@@ -78,7 +58,7 @@ class SanalPosResponseKuveytTurk implements SanalPosResponseInterface, SanalPos3
 
     public function response()
     {
-        return $this->xml;
+        return $this->response;
     }
 
     /**
@@ -89,33 +69,6 @@ class SanalPosResponseKuveytTurk implements SanalPosResponseInterface, SanalPos3
      */
     public function get3DHtml()
     {
-        $data1 = ($this->response->posnetOOSResponse->data1);
-        $data2 = ($this->response->posnetOOSResponse->data2);
-        $sign = ($this->response->posnetOOSResponse->sign);
-
-        $mid = $this->response->merchantInfo->mid;
-        $posnetid = $this->response->merchantInfo->posnetid;
-
-        $postUrl = 'http://setmpos.ykb.com/3DSWebService/YKBPaymentService';
-        if ('TEST' !== $this->mode) {
-            $postUrl = 'https://posnet.kuveytturk.com.tr/3DSWebService/YKBPaymentService';
-        }
-        //todo: make config these urls.
-
-        $html = '<form name="downloadForm" action="'.$postUrl.'" method="POST">';
-        $html .= '
-        <input name="posnetData" type="hidden" id="posnetData" value="'.$data1.'">
-      <input name="posnetData2" type="hidden" id="posnetData2" value="'.$data2.'">
-      <input name="mid" type="hidden" id="mid" value="'.$mid.'">
-      <input name="posnetID" type="hidden" id="posnetID" value="'.$posnetid.'">
-      <input name="digest" type="hidden" id="sign" value="'.$sign.'">
-      <!--<input name="vftCode" type="hidden" id="vftCode" value="<?php echo $vftCode; ?>">-->
-      <input name="merchantReturnURL" type="hidden" id="merchantReturnURL" value="'.$this->merchantReturnUrl.'">';
-        $html .= '</form>';
-        $html .= '<SCRIPT LANGUAGE="Javascript">document.downloadForm.submit();</SCRIPT>';
-
-        //dd($html);
-
-        return $html;
+        return $this->response['html'];
     }
 }
